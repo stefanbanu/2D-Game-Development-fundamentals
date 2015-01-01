@@ -37,5 +37,8 @@ public class Display {
 		frame.add(canvas);
 		frame.pack();
 	}
+	public Canvas getCanvas() {
+		return canvas;
+	}
 	
 }

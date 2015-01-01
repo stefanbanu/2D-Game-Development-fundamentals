@@ -1,23 +1,31 @@
 package com.stefanbanu.tile;
 
+import java.awt.Graphics;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+
 import com.stefanbanu.tile.display.Display;
+import com.stefanbanu.tile.gfx.ImageLoader;
 
 public class Game implements Runnable{
 
 	private Display display;
 	private Thread thread;
 	
+	private BufferStrategy bs;
+	private Graphics g;
+	
 	private boolean running = false;
 	
 	public int width, height;
 	private String title;
 	
+	private BufferedImage testImage;
+	
 	public Game(String title, int width, int height) {
 		this.width = width;
 		this.height = height;
 		this.title = title;
-		
-		start();
 	}
 
 	
@@ -34,12 +42,31 @@ public class Game implements Runnable{
 	}
 	private void init() {
 		display = new Display(title, width, height);
+		testImage = ImageLoader.loadImage("/textures/sb.png");
 	}
 	private void update() {
-	//	System.out.println("running");
+	
 	}
 	private void render() {
+		bs = display.getCanvas().getBufferStrategy();
+		if(bs == null){
+			display.getCanvas().createBufferStrategy(3);
+			return;
+		}
+		// the paint brush :)
+		g = bs.getDrawGraphics();
 		
+		// Clear the screen
+		g.clearRect(0, 0, width, height);
+		
+		// start drawing
+	
+		g.drawImage(testImage, 20, 20 ,null);
+		
+		// end drawing
+		
+		bs.show();
+		g.dispose();
 	}
 
 	public synchronized void start(){
