@@ -5,7 +5,7 @@ import com.stefanbanu.tile.display.Display;
 public class MainClass {
 
 	public static void main(String[] args) {
-		new Display("Title!", 300, 300);
+		new Game("Tile Game!", 400, 400);
 
 	}
 
