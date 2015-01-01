@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 
 import com.stefanbanu.tile.display.Display;
 import com.stefanbanu.tile.gfx.ImageLoader;
+import com.stefanbanu.tile.gfx.SpriteSheet;
 
 public class Game implements Runnable{
 
@@ -21,6 +22,7 @@ public class Game implements Runnable{
 	private String title;
 	
 	private BufferedImage testImage;
+	private SpriteSheet spriteSheet;
 	
 	public Game(String title, int width, int height) {
 		this.width = width;
@@ -42,7 +44,8 @@ public class Game implements Runnable{
 	}
 	private void init() {
 		display = new Display(title, width, height);
-		testImage = ImageLoader.loadImage("/textures/sb.png");
+		testImage = ImageLoader.loadImage("/textures/sheet2.png");
+		spriteSheet = new SpriteSheet(testImage);
 	}
 	private void update() {
 	
@@ -61,7 +64,7 @@ public class Game implements Runnable{
 		
 		// start drawing
 	
-		g.drawImage(testImage, 20, 20 ,null);
+		g.drawImage(spriteSheet.crop(32, 0, 32, 32), 50, 50 ,null);
 		
 		// end drawing
 		
