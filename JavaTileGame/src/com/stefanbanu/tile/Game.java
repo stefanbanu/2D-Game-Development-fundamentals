@@ -2,11 +2,9 @@ package com.stefanbanu.tile;
 
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
 
 import com.stefanbanu.tile.display.Display;
-import com.stefanbanu.tile.gfx.ImageLoader;
-import com.stefanbanu.tile.gfx.SpriteSheet;
+import com.stefanbanu.tile.gfx.Assets;
 
 public class Game implements Runnable{
 
@@ -21,8 +19,8 @@ public class Game implements Runnable{
 	public int width, height;
 	private String title;
 	
-	private BufferedImage testImage;
-	private SpriteSheet spriteSheet;
+	int x = 0;
+	
 	
 	public Game(String title, int width, int height) {
 		this.width = width;
@@ -35,20 +33,41 @@ public class Game implements Runnable{
 	public void run() {
 		init();	
 		
+		int fps = 60;
+		double timePerUpdate = 1000000000 /fps;
+		double delta = 0;
+		long now;
+		long lastTime = System.nanoTime();
+		long timer = 0;
+		int updates = 0;
+		
 		while(running){
-			update();
-			render();
+			now = System.nanoTime();
+			delta += (now - lastTime) / timePerUpdate;
+			timer += now - lastTime;
+			lastTime = now;
+			
+			if(delta > 1){
+				update();
+				render();
+				updates++;
+				delta--;
+			}
+			if(timer > 1000000000){
+				System.out.println("Updates and frames: " + updates);
+				updates = 0;
+				timer = 0;
+			}
 		}
 		// just in case is not already stopped
 		stop();
 	}
 	private void init() {
 		display = new Display(title, width, height);
-		testImage = ImageLoader.loadImage("/textures/sheet2.png");
-		spriteSheet = new SpriteSheet(testImage);
+		Assets.initAssets();
 	}
 	private void update() {
-	
+		x++;
 	}
 	private void render() {
 		bs = display.getCanvas().getBufferStrategy();
@@ -63,8 +82,8 @@ public class Game implements Runnable{
 		g.clearRect(0, 0, width, height);
 		
 		// start drawing
-	
-		g.drawImage(spriteSheet.crop(32, 0, 32, 32), 50, 50 ,null);
+		g.drawImage(Assets.tree, x, 50, null);
+		g.drawImage(Assets.player, 200, 250, null);
 		
 		// end drawing
 		
