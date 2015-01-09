@@ -5,27 +5,38 @@ import java.awt.image.BufferStrategy;
 
 import com.stefanbanu.tile.display.Display;
 import com.stefanbanu.tile.gfx.Assets;
+import com.stefanbanu.tile.states.GameState;
+import com.stefanbanu.tile.states.MenuState;
+import com.stefanbanu.tile.states.State;
 
 public class Game implements Runnable{
 
+	public int width, height;
+	private String title;
 	private Display display;
 	private Thread thread;
+	private boolean running = false;
 	
 	private BufferStrategy bs;
 	private Graphics g;
 	
-	private boolean running = false;
-	
-	public int width, height;
-	private String title;
-	
-	int x = 0;
-	
+	//States
+	private State gameState;
+	private MenuState menuState;
 	
 	public Game(String title, int width, int height) {
 		this.width = width;
 		this.height = height;
 		this.title = title;
+	}
+	
+	private void init() {
+		display = new Display(title, width, height);
+		Assets.initAssets();
+		
+		gameState = new GameState();
+		menuState = new MenuState();
+		State.setState(gameState);
 	}
 
 	
@@ -54,7 +65,7 @@ public class Game implements Runnable{
 				delta--;
 			}
 			if(timer > 1000000000){
-				System.out.println("Updates and frames: " + updates);
+			//	System.out.println("Updates and frames: " + updates);
 				updates = 0;
 				timer = 0;
 			}
@@ -62,12 +73,11 @@ public class Game implements Runnable{
 		// just in case is not already stopped
 		stop();
 	}
-	private void init() {
-		display = new Display(title, width, height);
-		Assets.initAssets();
-	}
+
 	private void update() {
-		x++;
+		if(State.getCurrentState() != null){
+			State.getCurrentState().update();
+		}
 	}
 	private void render() {
 		bs = display.getCanvas().getBufferStrategy();
@@ -82,8 +92,9 @@ public class Game implements Runnable{
 		g.clearRect(0, 0, width, height);
 		
 		// start drawing
-		g.drawImage(Assets.tree, x, 50, null);
-		g.drawImage(Assets.player, 200, 250, null);
+		if(State.getCurrentState() != null){
+			State.getCurrentState().render(g);
+		}
 		
 		// end drawing
 		
