@@ -2,12 +2,14 @@ package com.stefanbanu.tile.states;
 
 import java.awt.Graphics;
 
+import com.stefanbanu.tile.Game;
 import com.stefanbanu.tile.gfx.Assets;
 
 public class MenuState extends State {
 	
 	
-	public MenuState() {
+	public MenuState(Game game) {
+		super(game);
 		
 	}
 

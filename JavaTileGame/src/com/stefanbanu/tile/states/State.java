@@ -2,6 +2,8 @@ package com.stefanbanu.tile.states;
 
 import java.awt.Graphics;
 
+import com.stefanbanu.tile.Game;
+
 public abstract class State {
 
 	// game state manager
@@ -18,6 +20,13 @@ public abstract class State {
 	
 
 	// class
+	
+	protected Game game;
+	
+	public State(Game game) {
+		this.game = game;
+	}
+
 	public abstract void update();
 
 	public abstract void render(Graphics g);

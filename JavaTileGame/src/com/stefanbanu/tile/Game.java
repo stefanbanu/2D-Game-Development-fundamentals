@@ -24,18 +24,23 @@ public class Game implements Runnable{
 	private State gameState;
 	private MenuState menuState;
 	
+	// Input
+	private KeyManager keyManager;
+	
 	public Game(String title, int width, int height) {
 		this.width = width;
 		this.height = height;
 		this.title = title;
+		keyManager = new KeyManager();
 	}
 	
 	private void init() {
 		display = new Display(title, width, height);
+		display.getFrame().addKeyListener(keyManager);
 		Assets.initAssets();
 		
-		gameState = new GameState();
-		menuState = new MenuState();
+		gameState = new GameState(this);
+		menuState = new MenuState(this);
 		State.setState(gameState);
 	}
 
@@ -74,7 +79,13 @@ public class Game implements Runnable{
 		stop();
 	}
 
+	public KeyManager getKeyManager() {
+		return keyManager;
+	}
+
 	private void update() {
+		keyManager.update();
+		
 		if(State.getCurrentState() != null){
 			State.getCurrentState().update();
 		}
