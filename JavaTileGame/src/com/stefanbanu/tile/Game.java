@@ -5,6 +5,7 @@ import java.awt.image.BufferStrategy;
 
 import com.stefanbanu.tile.display.Display;
 import com.stefanbanu.tile.gfx.Assets;
+import com.stefanbanu.tile.input.KeyManager;
 import com.stefanbanu.tile.states.GameState;
 import com.stefanbanu.tile.states.MenuState;
 import com.stefanbanu.tile.states.State;
